@@ -11,12 +11,16 @@ public class MyGrid<T>
         public int x;
         public int y;
     }
-    // public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
+    public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
     private int width;
     private int height;
     private float cellSize;
     private Vector3 originPosition;
     private T[,] gridArray;
+
+    public float GetCellSize(){
+        return cellSize;
+    }
 
     public MyGrid(int width, int height, float cellSize, Vector3 originPosition, Func<MyGrid<T>, int, int, T> createGridObject){
         this.width = width;
@@ -32,7 +36,7 @@ public class MyGrid<T>
             }
         }        
 
-        bool showDebug = false;
+        bool showDebug = true;
         if (showDebug){     
             TextMesh[,] debugTextArray = new TextMesh[width, height];
 
@@ -46,9 +50,9 @@ public class MyGrid<T>
             Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
             Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
 
-            // OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) => {
-            //     debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
-            // };
+            OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) => {
+                debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
+            };
         }
     }
 
@@ -64,7 +68,12 @@ public class MyGrid<T>
     public void SetGridObject(int x, int y, T gridObject){
         if (x >=0 && x < width && y >= 0 && y < height){
             gridArray[x, y] = gridObject;
-            // if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, y = y});
+        }
+    }
+
+    public void TriggerGridObjectChanged(int x, int y) {
+        if (OnGridValueChanged != null) {
+            OnGridValueChanged(this, new OnGridValueChangedEventArgs {x = x, y = y});
         }
     }
 
