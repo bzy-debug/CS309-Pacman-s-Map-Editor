@@ -32,17 +32,17 @@ public class MapBuildingSystem : MonoBehaviour
             this.y = y;
         }
 
-        public void setplacedObject(PlacedObject placedObject){
+        public void setPlacedObject(PlacedObject placedObject){
             this.placedObject = placedObject;
             grid.TriggerGridObjectChanged(x, y);
         }
 
-        public void clearplacedObject() {
+        public void clearPlacedObject() {
             placedObject = null;
             grid.TriggerGridObjectChanged(x, y);
         }
 
-        public PlacedObject GetTransform(){
+        public PlacedObject GetPlacedObject(){
             return this.placedObject;
         }
 
@@ -76,15 +76,10 @@ public class MapBuildingSystem : MonoBehaviour
                 Vector3 placedObjectWorldPosition = grid.GetWorldPosition(x, y) +
                     new Vector3(rotationOffset.x, rotationOffset.y, 0) * grid.GetCellSize();
                 
-                Transform builtTransform = 
-                    Instantiate(
-                        placedObjectTypeSO.prefab,
-                        placedObjectWorldPosition,
-                        Quaternion.Euler(0, 0, placedObjectTypeSO.GetRotationAngle(dir))
-                    );
+                PlacedObject placedObject = PlacedObject.Create(placedObjectWorldPosition, new Vector2Int(x, y), dir, placedObjectTypeSO);
 
                 foreach (Vector2Int gridPosition in gridPositionList){
-                    grid.GetGridObject(gridPosition.x, gridPosition.y).setplacedObject(placedObject);
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).setPlacedObject(placedObject);
                 }
             } else {
                 UtilsClass.CreateWorldTextPopup("cannot build", UtilsClass.GetMouseWorldPosition());
@@ -92,11 +87,16 @@ public class MapBuildingSystem : MonoBehaviour
         }
 
         if (Input.GetMouseButton(1)) {
-            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
-            GridObject gridObject = grid.GetGridObject(x, y);
-            if (!gridObject.CanBuild()){
-                Destroy(gridObject.GetTransform().gameObject);
-                gridObject.clearTransform();
+            GridObject gridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
+            PlacedObject placedObject = gridObject.GetPlacedObject();
+            if (placedObject != null) {
+                placedObject.DestroySelf();
+
+                List<Vector2Int> gridPositionList = placedObject.GetGridPositionList();
+
+                foreach (Vector2Int gridPosition in gridPositionList) {
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).clearPlacedObject();
+                }
             }
         }
 

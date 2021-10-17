@@ -8,7 +8,7 @@ public class PlacedObject : MonoBehaviour
     private Vector2Int origin;
     private PlacedObjectTypeSO.Dir dir;
 
-    public static PlacedObject Create(Vector3 worldPosition, Vector2Int origin, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO){
+    public static PlacedObject Create(Vector3 placedObjectWorldPosition, Vector2Int origin, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO){
         Transform placedObjectTransform = 
             Instantiate(
                 placedObjectTypeSO.prefab,
@@ -22,5 +22,13 @@ public class PlacedObject : MonoBehaviour
         placedObject.dir = dir;
 
         return placedObject;
+    }
+
+    public List<Vector2Int> GetGridPositionList() {
+        return placedObjectTypeSO.GetGridPositionList(origin, dir);
+    }
+
+    public void DestroySelf() {
+        Destroy(gameObject);
     }
 }
