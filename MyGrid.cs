@@ -31,7 +31,7 @@ public class MyGrid<T>
         gridArray = new T[width, height];
 
         for (int x=0; x<width; x++){
-            for(int y=0; y<width; y++){
+            for(int y=0; y<height; y++){
                 gridArray[x, y] = createGridObject(this, x, y);
             }
         }        
@@ -54,6 +54,18 @@ public class MyGrid<T>
                 debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
             };
         }
+    }
+
+    public int GetWidth(){
+        return this.width;
+    }
+
+    public int GetHeight(){
+        return this.height;
+    }
+
+    public T[,] GetArray() {
+        return this.gridArray;
     }
 
     public Vector3 GetWorldPosition(int x, int y){
@@ -85,7 +97,7 @@ public class MyGrid<T>
     }
 
     public T GetGridObject(int x, int y) {
-        if (x >= 0 && x < width && y >= 0 && y < width){
+        if (x >= 0 && x < width && y >= 0 && y < height){
             return gridArray[x, y];
         } else {
             return default(T);
@@ -97,4 +109,16 @@ public class MyGrid<T>
         GetXY(worldPosition, out x, out y);
         return GetGridObject(x, y);
     }
+
+    public override string ToString()
+    {
+        string toString="";
+        for(int x=0; x<width; x++){
+            for(int y=0; y<height; y++){
+                toString += gridArray[x,y].ToString();
+            }
+        }
+        return toString;
+    }
+
 }

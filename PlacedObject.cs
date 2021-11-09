@@ -7,6 +7,7 @@ public class PlacedObject : MonoBehaviour
     private PlacedObjectTypeSO placedObjectTypeSO;
     private Vector2Int origin;
     private PlacedObjectTypeSO.Dir dir;
+    public int index;
 
     public static PlacedObject Create(Vector3 placedObjectWorldPosition, Vector2Int origin, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO){
         Transform placedObjectTransform = 
