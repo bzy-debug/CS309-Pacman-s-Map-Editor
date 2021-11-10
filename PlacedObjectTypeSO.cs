@@ -21,6 +21,16 @@ public class PlacedObjectTypeSO : ScriptableObject
     public int width;
     public int height;
 
+    public static Dir DirParse(string value){
+        switch(value) {
+            default: throw new System.Exception();
+            case "Down": return Dir.Down;
+            case "Left": return Dir.Left;
+            case "Up":   return Dir.Up;
+            case "Right": return Dir.Right;
+        }
+    }
+
     public int GetRotationAngle(Dir dir){
         switch(dir){
             default:

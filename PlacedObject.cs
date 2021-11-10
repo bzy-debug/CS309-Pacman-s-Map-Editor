@@ -9,6 +9,10 @@ public class PlacedObject : MonoBehaviour
     private PlacedObjectTypeSO.Dir dir;
     public int index;
 
+    public Vector2Int GetOrigin() {
+        return origin;
+    }
+
     public static PlacedObject Create(Vector3 placedObjectWorldPosition, Vector2Int origin, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO){
         Transform placedObjectTransform = 
             Instantiate(
